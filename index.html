@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jak-Inet</title>
+    <title>Jakinet</title>
     <link rel="stylesheet" href="style.css">
     <link class="icon" rel="icon" href="img/Jakinet Logo-circle.png" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -13,89 +13,198 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
+
+<div class="whatsapp-float" onclick="togglePopup()">
+  <img src="https://img.icons8.com/color/48/000000/whatsapp--v1.png" alt="WA" />
+</div>
+
+<div class="wa-popup" id="waPopup">
+  <h4>💬 Hubungi Kami</h4>
+  <div class="wa-input-group">
+    <input type="text" id="waName" placeholder="👤 Nama Lengkap" />
+  </div>
+  <div class="wa-input-group">
+    <textarea id="waMessage" placeholder="📝 Pesan Anda..."></textarea>
+  </div>
+  <div class="wa-input-group">
+    <select id="waTopic">
+      <option value="" disabled selected>📌 Pilih Topik</option>
+      <option value="baru">Pendaftar Baru</option>
+      <option value="keluhan">Keluhan Teknis</option>
+    </select>
+  </div>
+  <button onclick="sendWA()">Kirim Pesan</button>
+</div>
+
+<script>
+  function togglePopup() {
+    const popup = document.getElementById('waPopup');
+    popup.classList.toggle('show');
+  }
+
+function sendWA() {
+  const name = document.getElementById('waName').value.trim();
+  const message = document.getElementById('waMessage').value.trim();
+  const topic = document.getElementById('waTopic').value;
+
+  if (!name || !message || !topic) {
+    alert('Silakan isi nama, pesan, dan pilih topik.');
+    return;
+  }
+
+  let phone = '';
+  if (topic === 'baru') {
+    phone = '628112102060';
+  } else if (topic === 'keluhan') {
+    phone = '6282113000402';
+  }
+
+  const text = `Halo, saya ${name}.\n\n${message}`;
+  const finalMessage = encodeURIComponent(text);
+
+  const waUrl = `https://wa.me/${phone}?text=${finalMessage}`;
+  window.open(waUrl, '_blank');
+}
+
+  document.addEventListener('click', function (e) {
+    const popup = document.getElementById('waPopup');
+    const btn = document.querySelector('.whatsapp-float');
+    if (!popup.contains(e.target) && !btn.contains(e.target)) {
+      popup.classList.remove('show');
+    }
+  });
+</script>
+
+
 <body>
     <!-- Navbar -->
     <header>
       <!-- Nav Container -->
       <div class="nav container" class="nav container animate__animated animate__fadeInDown">
+          <a href="#home" class="logo" style="text-decoration: none">
+            <img src="img/Jakinet Logo.png" alt="Jak-Inet Logo" style="height: 3.5rem; width: 8rem;"">
+          </a>
         <!-- Menu Icon -->
         <i class="bx bx-menu" id="menu-icon"></i>
-        <!-- Logo -->
-        <a href="#" class="logo" style="text-decoration: none">
-        <img src="img/Jakinet Logo.png" alt="Jak-Inet Logo" style="height: 50px;">
-        </a>
-        <!-- Nav List -->
-        <ul class="navbar">
-          <li><a href="#home" class="active" style="text-decoration: none">Beranda</a></li>
-          <li><a href="#about" style="text-decoration: none">Tentang Jakinet</a></li>
-          <li><a href="#contact" style="text-decoration: none">Kontak</a></li>
-          <li><a href="#maps" style="text-decoration: none">Cakupan Area</a></li>
-        </ul>
+        <nav class="navbar" id="navbar">
+            <li><a href="#home" class="#" style="text-decoration: none"><b>Beranda</b></a></li>
+            <li><a href="#service" style="text-decoration: none"><b>Layanan</b></a></li>
+            <li><a href="#maps" style="text-decoration: none"><b>Cakupan Area</b></a></li>
+            <li><a href="#about" style="text-decoration: none"><b>Tentang Jakinet</b></a></li>
+            <li><a href="#contact" style="text-decoration: none"><b>Kontak</b></a></li>
+        </nav>
+          <script>
+            const menuIcon = document.getElementById('menu-icon');
+            const navbar = document.getElementById('navbar');
+
+            menuIcon.addEventListener('click', () => {
+              navbar.classList.toggle('active');
+
+              // Optional: toggle icon dari "menu" ke "close"
+              menuIcon.classList.toggle('bx-x');
+            });
+          </script>
       </div>
+<script>
+  window.addEventListener("scroll", function () {
+    const header = document.querySelector("header");
+    const links = document.querySelectorAll(".navbar a");
+
+    if (window.scrollY > 50) {
+      header.classList.add("scrolled");
+      links.forEach(link => link.classList.add("scrolled-link"));
+    } else {
+      header.classList.remove("scrolled");
+      links.forEach(link => link.classList.remove("scrolled-link"));
+    }
+  });
+</script>
+
     </header>
             <!-- Home -->
-    <section class="home bg-local" style="background-image: url(img/jakinet-banner-price-list.jpg);" id="home">
-    <div class="home-text">
-        <h1>Layanan Internet <span>Stabil</span> <br> dengan Harga <span>Terjangkau</span></h1>
-        <p>
-        Menjawab kebutuhan akan koneksi internet yang stabil,<br>
-        Jakinet hadir menjadi solusi untuk segala aktivitas digital kamu.        
-        </p>
-        <a href="#cars" class="btn">Discover Now</a>
-    </div>
+    <section class="home-slider" id="home">
+      <div class="slider-background" id="slider-background"></div>
+      <script>
+        const images = [
+          'img/JAkinet Banner.jpg',
+          'img/jakinet-banner-price-list.jpg'
+        ];
+
+        const slider = document.getElementById('slider-background');
+        let currentIndex = 0;
+
+        function showNextImage() {
+          // Ganti gambar
+          slider.style.opacity = 0; // Mulai fade out
+          setTimeout(() => {
+            slider.style.backgroundImage = `url('${images[currentIndex]}')`;
+            slider.style.transform = 'scale(1.05)'; // Zoom sedikit
+            slider.style.opacity = 1; // Fade in
+            setTimeout(() => {
+              slider.style.transform = 'scale(1)';
+            }, 1500); // Kembali normal
+          }, 800);
+
+          // Lanjut index
+          currentIndex = (currentIndex + 1) % images.length;
+        }
+
+        // Mulai pertama
+        slider.style.backgroundImage = `url('${images[0]}')`;
+        slider.style.opacity = 1;
+
+        // Ulangi setiap 5 detik
+        setInterval(showNextImage, 5000);
+      </script>
     </section>
-        <!-- Cars Section -->
-    <section class="cars" id="cars">
-      <div class="heading">
-        <span>Layanan</span>
-        <h2>Siap Melakukan</h2>
-        <p>Jakinet hadir dengan berbagai pilihan paket internet <br>yang bisa kamu sesuaikan dengan aktivitas digital kamu di rumah.</p>
-      </div>
-      <!-- Cars Container -->
-      <div class="columns-4 gap-8 cars-container">
-        <!-- Box 1 -->
-        <div class="box">
-          <img src="img/gratis_instalasi-icon.png" alt="" />
-          <h2>Gratis Instalasi</h2>
-        </div>
-        <!-- Box 2 -->
-        <div class="box">
-          <img src="img/gratis_wifi-modem-icon.png" alt="" />
-          <h2>Gratis WIFI Modem</h2>
-        </div>
-        <!-- Box 3 -->
-        <div class="box">
-          <img src="img/100-persen-fiber-optic-icon.png" alt="" />
-          <h2>100% Fiber Optic</h2>
-        </div>
-        <!-- Box 4 -->
-        <div class="box">
-          <img src="img/kuota-tanpa-batas-icon.png" alt="" />
-          <h2>Kuota Tanpa Batas</h2>
-        </div>
-      </div>
-    </section><br><br><br><br><br><br>
+
+<section class="cars video-bg-section">
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="img/Bg wifi.mp4" type="video/mp4" />
+    Browser kamu tidak mendukung video HTML5.
+  </video>
+
+  <div class="heading">
+    <span><b>Service</b></span>
+    <h2 style="color: black;">Layanan Internet Stabil dengan Harga Terjangkau</h2>
+    <p style="color: black;">Menjawab kebutuhan akan koneksi internet yang stabil, <br>Jakinet hadir menjadi solusi untuk segala aktivitas digital kamu.</p>
+  </div>
+
+  <div class="columns-4 gap-8 cars-container">
+    <!-- <div class="box">
+      <img src="img/gratis instalasi.JPG" alt="" />
+    </div> -->
+    <div class="box">
+      <img src="img/gratis wifi modem.JPG" alt="" />
+    </div>
+    <div class="box">
+      <img src="img/Fiber optic.JPG" alt="" />
+    </div>
+    <div class="box">
+      <img src="img/kuota tanpa batas.JPG" alt="" />
+    </div>
+  </div>
+</section><br><br><br>
     <!-- About -->
-    <span id="about" class="about-text"><h3 style="margin-left: 585px; color: orangered;"><b>Tentang Jakinet</b></h3></span>
+    <span id="service" class="about-text"><h3 style="text-align: center; position: static; color: orangered; padding-top: 5rem;">Layanan Jakinet</h3></span>
+    <h4 style="text-align: center; position: static;">Segala aktivitas digital kamu bisa dilakukan di rumah tanpa hambatan.</h4>
     <section class="about container" >
         <div class="about-img">
-          <img src="img/about.png" alt="" />
+          <img style="border-radius: 1.5rem;" src="img/Rusun.jpg" alt="" />
         </div>
         <div class="about-text">
           <h2>Jakinet Rusun</h2>
           <p>Kehidupan perkotaan modern membutuhkan akses internet yang andal, dan Jakinet Rusun hadir untuk memenuhi kebutuhan itu. Dirancang khusus untuk lingkungan rusun dan apartemen, Jakinet Rusun memberikan koneksi internet yang stabil dan cepat bagi para penghuninya. Bersama JAKINET Rusun, jelajahi dunia digital dengan percaya diri dan nikmati gaya hidup perkotaan tanpa hambatan. </p>
-          <!-- About Button -->
         </div><br>
-        <div class="about-img">
-          <img src="img/about.png" alt="" />
+        <!-- <div class="about-img">
+          <img style="border-radius: 1.5rem;" src="img/Soho.jpg" alt="" />
         </div>
         <div class="about-text">
           <h2>Jakinet Soho</h2>
           <p>Bisnis Anda layak mendapat yang terbaik, dan itu dimulai dengan koneksi internet yang tak terkalahkan. Dengan JAKINET SOHO, kantor kecil dan usaha rumahan (SOHO) Anda akan merasakan kecepatan, reliabilitas, dan keamanan yang diperlukan untuk berkembang. Hadirkan produktivitas tanpa batas ke dalam ruang kerja Anda dengan Jakinet Soho, solusi internet yang memenuhi ambisi bisnis Anda.</p>
-          <!-- About Button -->
-        </div><br>
+        </div><br> -->
         <div class="about-img">
-          <img src="img/about.png" alt="" />
+          <img style="border-radius: 1.5rem;" src="img/enterprise.jpg" alt="" />
         </div>
         <div class="about-text">
           <h2>Jakinet Enterprise</h2>
@@ -103,97 +212,333 @@
           <!-- About Button -->
         </div><br>
         <div class="about-img">
-          <img src="img/about.png" alt="" />
+          <img style="border-radius: 1.5rem;" src="img/Home.jpg" alt="" />
         </div>
         <div class="about-text">
           <h2>Jakinet Home</h2>
           <p>Jakinet Home membawa Anda ke dalam dunia internet yang cepat, stabil, dan aman di rumah Anda. Nikmati streaming tanpa hambatan, game online tanpa lag, dan koneksi yang handal untuk semua kebutuhan digital Anda. JAKINET Home, kenyamanan internet di rumah yang Anda impikan. </p>
           <!-- About Button -->
-        </div><br>
-    </section><div style="padding-left: 590px;">
-        <a href="#parts" class="btn" >Daftar Sekarang</a>
         </div>
-    <br />
-    <section class="parts" id="parts">
-      <div class="heading">
-        <span>What We Offer</span>
-        <h2>Our Car Is Always Excellent</h2>
-        <p>Pilihlah mobil selera anda dengan budget yang anda punya sekarang.</p>
+    </section>
+    <!-- <div style="text-align: center; position: static;">
+        <a href="https://api.whatsapp.com/send?phone=628112102060&text=halo%20kami%20siap%20membantu%20anda%20%F0%9F%99%8F" class="btn" >Hubungi Kami</a>
+        </div>
+    <br /> -->
+<section class="parts video-bg-section">
+  <!-- VIDEO BACKGROUND -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="img/Bg wifi.mp4" type="video/mp4" />
+    Browser kamu tidak mendukung video HTML5.
+  </video>
+
+  <!-- KONTEN UTAMA -->
+  <div class="heading">
+    <span><b>Daftar Internet</b></span>
+    <h2 style="color: black;">Internetan tanpa batas dengan harga yang terjangkau!</h2>
+    <p style="color: black;">Jakinet hadir dengan berbagai pilihan paket internet.</p>
+  </div>
+
+  <div class="parts-container container";">
+    <!-- Box 1 -->
+    <div class="box" data-tilt data-tilt-scale="1.1" style="text-align: center;">
+      <img src="img/50mbps.png" alt="" style="border-radius: 1rem;" />
+      <h3>Dedicated Internet</h3>
+      <h4><span>50 Mbps</span></h4>
+      <!-- <p>Harga belum termasuk PPN</p><br> --> <br>
+      <a href="https://api.whatsapp.com/send/?phone=628112102060&text&type=phone_number&app_absent=0" class="btn">Daftar Sekarang</a>
+    </div>
+
+    <!-- Box 2 -->
+    <div class="box" data-tilt data-tilt-scale="1.1">
+      <img src="img/100mbps.png" alt="" style="border-radius: 1rem;" />
+      <h3>Dedicated Internet</h3>
+      <h4><span>100 Mbps</span></h4>
+      <!-- <p>Harga belum termasuk PPN</p><br> --> <br>
+      <a href="https://api.whatsapp.com/send/?phone=628112102060&text&type=phone_number&app_absent=0" class="btn">Daftar Sekarang</a>
+    </div>
+
+    <!-- Box 3 -->
+    <div class="box" data-tilt data-tilt-scale="1.1">
+      <img src="img/200mbps.png" alt="" style="border-radius: 1rem;" />
+      <h3>Dedicated Internet</h3>
+      <h4><span>200 Mbps</span></h4>
+      <!-- <p>Harga belum termasuk PPN</p><br> --> <br>
+      <a href="https://api.whatsapp.com/send/?phone=628112102060&text&type=phone_number&app_absent=0" class="btn">Daftar Sekarang</a>
+    </div>
+  </div>
+</section>
+    <br>
+<section class="maps" id="maps" style=" padding: 60px 20px; text-align: center; background-color: #f9f9f9;">
+  <div class="heading" style="margin-top: 1rem;">
+    <h2>Cakupan Area</h2>
+    <p>Nikmati layanan Internet stabil dengan harga yang terjangkau dari Jakinet!</p>
+  </div>
+
+  <!-- Leaflet Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+  <div id="map" style="height: 400px; width: 100%; margin-top: 30px; border-radius: 1rem;"></div>
+  <div style="width: 90%; margin-left: 4rem; text-align: right;">
+    <input type="text" id="searchInput" placeholder="Cari alamat atau nama rusun..." 
+      style="padding: 8px; width: 300px; border-radius: 5px; border: 1px solid #cccccc; 
+             box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 35px;">
+  </div>
+
+  <div class="table-container" style="margin: 10px auto; width: 90%;">
+    <table id="lokasiTable" class="display" style="width:100%">
+      <thead>
+        <tr>
+          <th>Nama Rusun</th>
+          <th>Alamat</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-lat="-6.1727" data-lng="106.8006">
+          <td>KS Tubun</td>
+          <td>Jl. Taman Bunga 1 No.1, RT03/RW01, Kota Bambu Selatan, Palmerah, Jakarta Barat</td>
+        </tr>
+        <tr data-lat="-6.1252" data-lng="106.7944">
+          <td>Penjaringan</td>
+          <td>Jl. Tanah Merah, Penjaringan, Jakarta Utara</td>
+        </tr>
+        <tr data-lat="-6.1573" data-lng="106.7402">
+          <td>Daan Mogot Umum</td>
+          <td>Jl. Daan Mogot, RT03/RW14, Duri Kosambi, Cengkareng, Jakarta Barat</td>
+        </tr>
+        <tr data-lat="-6.1573" data-lng="106.7402">
+          <td>Daan Mogot Relokasi</td>
+          <td>Jl. Daan Mogot, RT03/RW14, Duri Kosambi, Cengkareng, Jakarta Barat</td>
+        </tr>
+        <tr data-lat="-6.1248" data-lng="106.9632">
+          <td>Rorotan</td>
+          <td>Jl. Rorotan IV, Rorotan, Cilincing, Jakarta Utara</td>
+        </tr>
+        <tr data-lat="-6.1248" data-lng="106.9632">
+          <td>Nagrak (Tower Hijau)</td>
+          <td>Jl. Nagrak, RT04/RW02, Cilincing, Jakarta Utara</td>
+        </tr>
+        <tr data-lat="-6.2105" data-lng="106.9505">
+          <td>Pinus Elok D</td>
+          <td>Jl. Rusunawa Penggilingan, RT01/RW07, Penggilingan, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.2105" data-lng="106.9505">
+          <td>Pinus Elok E</td>
+          <td>Jl. Rusunawa Penggilingan, RT01/RW07, Penggilingan, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.2128" data-lng="106.9523">
+          <td>Pinus Elok C</td>
+          <td>Jl. Ulin Elok RT02/RW09, Penggilingan, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.2134" data-lng="106.9518">
+          <td>Pinus Elok B</td>
+          <td>Jl. Aneka Elok Rusun Pinus Elok Blok B, Penggilingan, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.2047" data-lng="106.9553">
+          <td>Rawa Bebek Blok Utara</td>
+          <td>Jl. Inspeksi Kanal Tim, RT02/RW17, Pulogebang, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.2047" data-lng="106.9553">
+          <td>Rawa Bebek Blok Tengah</td>
+          <td>Jl. Inspeksi Kanal Tim, RT02/RW17, Pulogebang, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.2133" data-lng="106.9499">
+          <td>Pinus Elok A</td>
+          <td>Jl. Boulevard Raya, RT17/RW07, Penggilingan, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.1840" data-lng="106.9402">
+          <td>Cakung KM 2</td>
+          <td>Jl. Bekasi Timur Raya No.22, RT01/RW01, Cakung Barat, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.1772" data-lng="106.9363">
+          <td>Tipar Cakung</td>
+          <td>Jl. Komp. Rusun Griya Tipar Cakung, RT01/RW08, Cakung Barat, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.1709" data-lng="106.9325">
+          <td>Cakung Barat</td>
+          <td>Jl. Rusunawa Cakung Barat, RT15/RW08, Cakung Barat, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.2117" data-lng="106.9543">
+          <td>Pulogebang Tower</td>
+          <td>Jl. Mutiara Raya, RT14/RW11, Pulo Gebang, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.2117" data-lng="106.9543">
+          <td>Pulogebang Relokasi</td>
+          <td>Jl. Mutiara Raya, RT14/RW11, Pulo Gebang, Cakung, Jakarta Timur</td>
+        </tr>
+        <tr data-lat="-6.1248" data-lng="106.9632">
+          <td>Nagrak (Tower Biru)</td>
+          <td>Jl. Nagrak, RT04/RW02, Cilincing, Jakarta Utara</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script>
+        var map = L.map('map', { scrollWheelZoom: false }).setView([-6.2, 106.85], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    map.on('click', function () {
+      map.scrollWheelZoom.enable();
+    });
+
+    map.on('mouseout', function () {
+      map.scrollWheelZoom.disable();
+    });
+
+    let markers = [];
+    const rows = document.querySelectorAll("#lokasiTable tbody tr");
+
+    rows.forEach(row => {
+      const lat = parseFloat(row.dataset.lat);
+      const lng = parseFloat(row.dataset.lng);
+      const nama = row.cells[0].innerText;
+      const alamat = row.cells[1].innerText;
+
+      const marker = L.marker([lat, lng])
+        .addTo(map)
+        .bindPopup(`<strong>${nama}</strong><br>${alamat}`);
+
+      markers.push(marker);
+
+      row.addEventListener("click", () => {
+        map.setView([lat, lng], 16);
+        marker.openPopup();
+
+        rows.forEach(r => r.style.backgroundColor = "");
+        row.style.backgroundColor = "#ffe2d6";
+      });
+    });
+
+    const group = L.featureGroup(markers);
+    map.fitBounds(group.getBounds());
+
+    // Search Function
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+      const filter = this.value.toLowerCase();
+
+      rows.forEach(row => {
+        const namaRusun = row.cells[0].textContent.toLowerCase();
+        const alamat = row.cells[1].textContent.toLowerCase();
+
+        if (namaRusun.includes(filter) || alamat.includes(filter)) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    });
+  </script>
+</section>
+
+    <section class="about container" id="about">
+      <div class="aboutt-img">
+        <img style="border-radius: 1.5rem;" src="img/Jakinet Logo.png" alt="" />
       </div>
-      <!-- Parts Container -->
-      <div class="parts-container container">
-        <!-- Box 1 -->
-        <div class="box">
-          <img src="img/McLaren.png" alt="" />
-          <h3>McLaren 570GT</h3>
-          <h4><span>Rp.32.800.000</span>/5 Hari</h4>
-          <i class="bx bxs-star">(6 Reviews)</i>
-          <a href="formregistrasi.html" class="btn">Rent Now</a>
-          <a href="https://www.autofun.co.id/mobil/mclaren/570gt" class="details">View Details</a>
-        </div>
-        <!-- Box 2 -->
-        <div class="box">
-          <img src="img/Lamborghini.png" alt="" />
-          <h3>Lamborghini Centenario LP770</h3>
-          <h4><span>Rp.37.999.999</span>/5 Hari</h4>
-          <i class="bx bxs-star">(6 Reviews)</i>
-          <a href="formregistrasi.html" class="btn">Rent Now</a>
-          <a href="https://www.lamborghini.com/en-en/history/centenario" class="details">View Details</a>
-        </div>
-        <!-- Box 3 -->
-        <div class="box">
-          <img src="img/Ferrari.png" alt="" />
-          <h3>Ferrari 458 Italia</h3>
-          <h4><span>Rp.29.900.000</span>/5 Hari</h4>
-          <i class="bx bxs-star">(6 Reviews)</i>
-          <a href="formregistrasi.html" class="btn">Rent Now</a>
-          <a href="https://www.ferrari.com/en-EN/auto/458-italia" class="details">View Details</a>
+      <div class="about-text" style="margin-left: 1rem; margin-top: 1rem;">
+        <h2>Tentang JAKINET</h2>
+        <p style="text-align: justify;">PT Jakarta Infrastruktur Propertindo pada awalnya bernama PT Jakarta Komunikasi didirikan di Jakarta pada tanggal 2 Oktober 2006 sebagai sub holding bidang infrastruktur dari BUMD Perusahaan Induk, PT Jakarta Propertindo (Perseroda) yang meliputi bidang usaha pembangunan, bidang usaha jasa telekomunikasi dan perdagangan peralatan transmisi telekomunikasi. <br><br>
+          Asal mula dibentuknya PT Jakarta Infrastruktur Propertindo adalah Surat Gubernur Provinsi DKI Jakarta Nomor 1762/-071.24 tanggal 8 Agustus 2006, tentang Pembentukan Badan Usaha Telekomunikasi. <br><br>
+          Perseroan telah mendapatkan dukungan dari Pemerintah Provinsi DKI Jakarta untuk dapat membangun Sarana Jaringan Utilitas Terpadu (SJUT) di wilayah DKI Jakarta. Perseroan selain bergerak dalam bidang ICT, dan Periklanan, saat ini telah merambah pada bisnis layanan internet dengan produk JAKINET.</p><br>
+    </section>
+    <section class="youtube">
+      <div style="
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        text-align: center;
+        padding: 20px;
+      ">
+        <div style="
+          position: relative;
+          padding-bottom: 56.25%;
+          height: 0;
+          overflow: hidden;
+          border-radius: 12px;
+        ">
+          <iframe 
+            src="https://www.youtube.com/embed/FGHQQw4AtGA?si=Q_StaWokdF1JWSGv" 
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            style="
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              border: none;
+              border-radius: 12px;
+            ">
+          </iframe>
         </div>
       </div>
     </section>
-    <br /><br /><br /><br /><br /><br /><br />
+
+    </section>
+    <br /><br />
     <!-- Footer -->
-    <section class="footer">
+    <section class="footer" id="contact">
       <div class="footer-container container">
         <div class="footer-box">
         <a href="#" class="logo" style="text-decoration: none">
-        <img src="img/Jakinet Logo.png" alt="Jak-Inet Logo" style="height: 50px;">
+        <img src="img/Jakinet Logo.png" alt="Jak-Inet Logo" style="height: 70px; width: 13rem; margin-left: 5rem; ">
+        </a><br>
+        <a href="https://jakarta-infrastruktur.com/" class="logo" style="text-decoration: none">
+        <img src="img/logo jip.png" alt="Jakpro Logo" style="height: 10rem; width: 20rem; position: static;;">
         </a>
-          <div class="social">
-            <a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a>
-            <a href="https://twitter.com/?lang=id"><i class="bx bxl-twitter"></i></a>
-            <a href="https://www.instagram.com/yzhalcyn/"><i class="bx bxl-instagram"></i></a>
-            <a href="https://www.youtube.com/channel/UCZuuVLJ7dw8LE6eAlVsF7rQ"><i class="bx bxl-youtube"></i></a>
+          <div class="social" style="justify-content: center;">
+            <a href="https://www.facebook.com/jipjakartainfrastruktur/"><i class="bx bxl-facebook"></i></a>
+            <a href="https://www.tiktok.com/@jip.jakpro"><i class="bx bxl-tiktok"></i></a>
+            <a href="https://www.instagram.com/jipjakartainfrastruktur/"><i class="bx bxl-instagram"></i></a>
+            <a href="https://www.youtube.com/@ptjakartainfrastrukturprop4828"><i class="bx bxl-youtube"></i></a>
           </div>
         </div>
         <div class="footer-box">
-          <h3>Page</h3>
-          <a href="#home">Home</a>
-          <a href="#cars">Cars</a>
-          <a href="#parts">All Type</a>
-          <a href="https://www.instagram.com/yzhalcyn/">Sales</a>
+          <h3><b>WhatsApp</b></h3>
+            <p>● Pelaporan Gangguan Layanan</p>
+            <a style="color: orangered;" href="https://api.whatsapp.com/send/?phone=6282113000402&text&type=phone_number&app_absent=0"><b>(+62) 821-1300-0402</b></a>
+          <p>● Informasi Produk Layanan Bisnis Telekomunikasi</p>
+          <a style="color: orangered;" href="https://api.whatsapp.com/send/?phone=628112102060&text&type=phone_number&app_absent=0"><b>(+62) 811-2102-060</b></a>
+          <br>
+          <h3><b>Alamat</b></h3>
+          <p><a href="https://maps.app.goo.gl/qhVicE7ZWrWN1v5r8">Gedung Thamrin City Lt. 2 Blok F <br>
+            Jl. Thamrin Boulevard, Kel. Kebon Melati, Kec. Tanah Abang, Jakarta Pusat</a></p>
         </div>
         <div class="footer-box">
-          <h3>Legal</h3>
-          <a href="#">Privacy</a>
-          <a href="#">Refund Policy</a>
-          <a href="#">Cookie Policy</a>
-        </div>
-        <div class="footer-box">
-          <h3>Contact</h3>
-          <p>Indonesia</p>
-          <p>Japan</p>
-          <p>Germany</p>
-          <p>United States</p>
+          <h3><b>Email</b></h3>    
+          <a>● <b style="color: orangered;">info@jakarta-infrastruktur.com</b></a>
+          <p>Untuk pertanyaan umum, kemitraan, atau informasi perusahaan.</p>
+          <a>● <b style="color: orangered;">sales@jakarta-infrastruktur.com</b></a>
+          <p>Untuk permintaan penawaran, konsultasi produk, atau diskusi proyek.</p>
+          <a>● <b style="color: orangered;">noc@jakarta-infrastruktur.com & noc@jakinet.id</b></a>
+          <p>Untuk dukungan teknis, pelaporan gangguan layanan.</p>
+          <br>      
         </div>
       </div>
     </section>
+   
     <!-- Copyright -->
     <div class="copyright">
-      <p>&#169; YazidAsyharie All Right Reserved</p>
+      <p>&#169; 2023-2025 <b>PT Jakarta Infrastruktur Propertindo</b>. All rights reserved.</p>
     </div>
     <!-- Link To JS -->
-    <script src="main.js"></script>
+    <script src="script.js"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-</body>
+    <script type="text/javascript" src="vanilla-tilt.js"></script>
+    <script type="text/javascript">
+      VanillaTilt.init(document.querySelector(".box"), {
+        max: 25,
+        speed: 400
+      });
+      
+      //It also supports NodeList
+      VanillaTilt.init(document.querySelectorAll(".box"));
+    </script>
+  </body>
 </html>
